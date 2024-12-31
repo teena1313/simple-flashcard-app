@@ -39,6 +39,8 @@ export class SeeScore extends Component<ScoreProps, ScoreState> {
   renderScores= (): JSX.Element => {
     if (this.state.scores === undefined) {
       return <p>Loading Scores...</p>
+    } else if (this.state.scores.length === 0) {
+      return <p>--No past scores yet--</p>
     } else {
       const scoreRecs: JSX.Element[] = [];
       for (const s of this.state.scores) {
