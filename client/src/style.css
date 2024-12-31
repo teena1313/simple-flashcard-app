@@ -1,0 +1,18 @@
+.card {
+  padding: 40px 0;
+  width: 50%;
+  text-align: center;
+  font-size: 30px;
+  border: 5px solid #2196F3;
+  background-color: #f7f7f7;
+}
+
+.error {
+  color: red;
+  font-weight: bold;
+}
+
+
+label { 
+  display: block; 
+}
