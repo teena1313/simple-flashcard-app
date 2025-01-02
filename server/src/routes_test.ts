@@ -6,7 +6,7 @@ type scoreRecord = {player: string, deck: string, score: number}
 
 describe('routes', function() {
 
-  // TODO: add tests for your routes
+  // TODO: add tests for routes
 
   it('addScore', function() {
     // First branch, straight line code, error case (only one possible input)
