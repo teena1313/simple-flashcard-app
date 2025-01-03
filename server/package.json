@@ -1,7 +1,7 @@
 {
-  "name": "cse331-hw-flashcard-server",
+  "name": "flashcard-server",
   "version": "0.0.1",
-  "description": "CSE 331 Flashcard Server",
+  "description": "Flashcard Server",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc --build tsconfig.json",
