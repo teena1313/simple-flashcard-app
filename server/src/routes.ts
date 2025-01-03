@@ -15,14 +15,15 @@ let savedScores: scoreRecord[] = [];
 const savedDecks: Map<string, card[]> = new Map<string, card[]>();
 const {Client} = pg;
 
+require('dotenv').config()
 console.log(process.env)
 
 const con: pg.Client = new Client({
-   host: process.env.flashcard_host,
-   user: process.env.flashcard_user,
-   password: process.env.flashcard_pwd,
-   database: process.env.flashcard_database,
-   port: +(process.env.flashcard_port || 5432)
+   host: process.env.REACT_APP_HOST,
+   user: process.env.REACT_APP_USER,
+   password: process.env.REACT_APP_PWD,
+   database: process.env.REACT_APP_DB,
+   port: +(process.env.REACT_APP_PORT || 5432)
 });
 
 con.connect();
