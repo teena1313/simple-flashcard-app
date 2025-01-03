@@ -2,7 +2,8 @@ import { Request, Response } from "express";
 import { ParamsDictionary } from "express-serve-static-core";
 import pg from 'pg';
 // import mysql from 'mysql';
-
+import dotenv from 'dotenv';
+dotenv.config();
 
 // Require type checking of request body.
 type SafeRequest = Request<ParamsDictionary, {}, Record<string, unknown>>;
@@ -15,8 +16,9 @@ let savedScores: scoreRecord[] = [];
 const savedDecks: Map<string, card[]> = new Map<string, card[]>();
 const {Client} = pg;
 
-require('dotenv').config()
+// require('dotenv').config()
 console.log(process.env)
+
 
 const con: pg.Client = new Client({
    host: process.env.REACT_APP_HOST,
