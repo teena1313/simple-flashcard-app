@@ -25,7 +25,7 @@ const config = {
     proxy: {
        '/api': {
             target: 'http://localhost:8080',
-            router: () => 'http://localhost:8088',
+            router: () => 'http://10.0.0.98:8088',
             logLevel: 'debug'
        }
     }
