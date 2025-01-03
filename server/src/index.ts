@@ -1,6 +1,5 @@
 import express, { Express } from "express";
-import { addScore, addDeck, loadDeck, listDecks, listScores } from './routes';
-import { createDecksTable, createCardsTable, createScoresTable } from './dbroutes';
+import { createDecksTable, createCardsTable, createScoresTable, addScore, addDeck, loadDeck, listDecks, listScores } from './routes';
 import bodyParser from 'body-parser';
 
 // Configure and start the HTTP server.

@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import { ParamsDictionary } from "express-serve-static-core";
+import pg from 'pg';
+// import mysql from 'mysql';
 
 
 // Require type checking of request body.
@@ -11,7 +13,34 @@ type scoreRecord = {player: string, deck: string, score: number}
 
 let savedScores: scoreRecord[] = [];
 const savedDecks: Map<string, card[]> = new Map<string, card[]>();
+const {Client} = pg;
 
+const con: pg.Client = new Client({
+   host: "db",
+   user: "postgres",
+   password: "1234",
+   database: "postgres",
+   port: 5432,
+});
+
+con.connect();
+
+export const createDecksTable = async () => {
+   await con.query(`CREATE TABLE IF NOT EXISTS decks
+      (deckname VARCHAR (255) UNIQUE NOT NULL PRIMARY KEY);`)
+};
+
+export const createCardsTable = async () => {
+   await con.query(`CREATE TABLE IF NOT EXISTS cards
+      (card_id serial PRIMARY KEY, deckname VARCHAR (255) REFERENCES decks, 
+      front VARCHAR (255) NOT NULL, back VARCHAR(255) NOT NULL);`)
+};
+
+export const createScoresTable = async () => {
+   await con.query(`CREATE TABLE IF NOT EXISTS scores
+      (score_id serial PRIMARY KEY, deckname VARCHAR (255) REFERENCES decks,
+       username VARCHAR (255) NOT NULL, score integer NOT NULL);`)
+};
 
 /**
  * Adds the new score to the savedScores array.
@@ -19,7 +48,7 @@ const savedDecks: Map<string, card[]> = new Map<string, card[]>();
  * @param res response
  * @return true on success via response, sends error codes otherwise.
  */
-export const addScore = (req: SafeRequest, res: SafeResponse): void => {
+export const addScore = async(req: SafeRequest, res: SafeResponse): Promise<void> => {
   const newPlayer = req.body.player;
   if (newPlayer === undefined || typeof newPlayer !== 'string') {
     res.status(400).send('missing "player" parameter / given param was not a string');
@@ -37,9 +66,20 @@ export const addScore = (req: SafeRequest, res: SafeResponse): void => {
     res.status(400).send('required argument "score" was missing');
     return;
   }
+  // save data locally
   const newEntry: scoreRecord = {player: newPlayer, deck: newDeck, score: newScore};
   savedScores.push(newEntry);
-  res.send({success: true});
+
+  // save data to database
+  try {
+    const response = await con.query(`INSERT INTO scores(deckname, username, score) VALUES ('${newDeck}', '${newPlayer}', ${newScore});`);
+    if (response){
+       res.status(200).send({success: true});
+    }
+  } catch (error) {
+    res.status(500).send('Error');
+    console.log(error);
+  }
 };
 
 
@@ -50,7 +90,8 @@ export const addScore = (req: SafeRequest, res: SafeResponse): void => {
  * @return 3 on success, 2 if there were formatting issues with the given card content,
  *         and 1 if the deck already exists via response
  */
-export const addDeck = (req: SafeRequest, res: SafeResponse): void => {
+export const addDeck = async (req: SafeRequest, res: SafeResponse): Promise<void> => {
+  let success: number = 0;
   const name = req.body.name;
   if (name === undefined || typeof name !== 'string') {
     res.status(400).send('missing "name" parameter / given param was not a string');
@@ -71,8 +112,38 @@ export const addDeck = (req: SafeRequest, res: SafeResponse): void => {
     res.send({saved: 2});
     return;
   }
+
   savedDecks.set(name, cards);
-  res.send({saved: 3});
+
+  // try saving to database
+  try {
+    const response = await con.query(`INSERT INTO decks(deckname) VALUES ('${name}');`);
+    if (response) {
+      success += 1;
+    }
+  } catch (error) {
+    res.status(500).send('Error');
+    console.log(error);
+  }
+
+  for (const card of cards) {
+    try {
+      const response = await con.query(`INSERT INTO cards(deckname, front, back) VALUES ('${name}', '${card.front}', ${card.back});`);
+      if (response){
+        success += 1;
+      }
+    } catch (error) {
+      res.status(500).send('Error');
+      console.log(error);
+    }
+  }
+
+  if (success === cards.length + 1) {
+    res.status(200).send({saved: 3});
+  } else {
+    res.status(500).send('Error');
+    console.log(success);
+  }
 };
 
 /**
