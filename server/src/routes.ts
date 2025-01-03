@@ -15,12 +15,14 @@ let savedScores: scoreRecord[] = [];
 const savedDecks: Map<string, card[]> = new Map<string, card[]>();
 const {Client} = pg;
 
+console.log(process.env)
+
 const con: pg.Client = new Client({
-   host: "db",
-   user: "postgres",
-   password: "1234",
-   database: "postgres",
-   port: 5432,
+   host: process.env.flashcard_host,
+   user: process.env.flashcard_user,
+   password: process.env.flashcard_pwd,
+   database: process.env.flashcard_database,
+   port: +(process.env.flashcard_port || 5432)
 });
 
 con.connect();
