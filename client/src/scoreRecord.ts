@@ -4,8 +4,8 @@ import { isRecord } from "./record";
 // Description of an individual score record
 // RI: score >= 0
 export type scoreRecord = {
-  readonly player: string,
-  readonly deck: string,
+  readonly username: string,
+  readonly deckname: string,
   readonly score: number
 };
 
@@ -22,12 +22,12 @@ export const parseScoreRecord = (val: unknown): undefined | scoreRecord => {
     return undefined;
   }
 
-  if (typeof val.player !== "string") {
+  if (typeof val.username !== "string") {
     console.error("not a scoreRecord: missing 'player'", val)
     return undefined;
   }
 
-  if (typeof val.deck !== "string") {
+  if (typeof val.deckname !== "string") {
     console.error("not a scoreRecord: missing 'deck'", val)
     return undefined;
   }
@@ -37,7 +37,5 @@ export const parseScoreRecord = (val: unknown): undefined | scoreRecord => {
     return undefined;
   }
 
-  return {
-    player: val.player, deck: val.deck, score: val.score
-  };
+  return {username: val.username, deckname: val.deckname, score: val.score};
 };

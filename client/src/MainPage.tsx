@@ -1,5 +1,5 @@
 import React, { Component, MouseEvent } from "react";
-// import { isRecord } from './record';
+import { parseRecord } from './record';
 
 type MainProps = {
   onCreate: () => void,  // callback function to go to create page
@@ -110,14 +110,15 @@ export class MainPage extends Component<MainProps, MainPageState> {
     }
 
     const decks: string[] = [];
-    for (const deck of val) {
-      if (typeof deck !== 'string') {
-        console.error("item.name is missing or invalid", deck);
-        return undefined;
+    for (const curr of val) {
+      const deck = parseRecord(curr);
+      if (deck === undefined) {
+        return;
       } else {
         decks.push(deck);
       }
     }
+
     return decks;
   };
 

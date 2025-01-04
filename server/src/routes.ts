@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { ParamsDictionary } from "express-serve-static-core";
 import pg from 'pg';
+
 // import mysql from 'mysql';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -17,7 +18,7 @@ const savedDecks: Map<string, card[]> = new Map<string, card[]>();
 const {Client} = pg;
 
 // require('dotenv').config()
-console.log(process.env)
+// console.log(process.env)
 
 
 const con: pg.Client = new Client({
@@ -101,6 +102,7 @@ export const addDeck = async (req: SafeRequest, res: SafeResponse): Promise<void
     res.status(400).send('missing "name" parameter / given param was not a string');
     return;
   }
+
   if (savedDecks.has(name)) {
     res.send({saved: 1});
     return;
@@ -116,7 +118,6 @@ export const addDeck = async (req: SafeRequest, res: SafeResponse): Promise<void
     res.send({saved: 2});
     return;
   }
-
   savedDecks.set(name, cards);
 
   // insert deck name into deck table
@@ -147,7 +148,6 @@ export const addDeck = async (req: SafeRequest, res: SafeResponse): Promise<void
     res.status(200).send({saved: 3});
   } else {
     res.status(500).send('Error');
-    console.log(success);
   }
 };
 
@@ -164,22 +164,22 @@ export const loadDeck = async (req: SafeRequest, res: SafeResponse): Promise<voi
     return;
   }
   
-  const result = savedDecks.get(name);
-  if (result === undefined) {
-    res.status(404).send('did not find deck with "name"');
-    return;
-  }
+  // const result = savedDecks.get(name);
+  // if (result === undefined) {
+  //   res.status(404).send('did not find deck with "name"');
+  //   return;
+  // }
 
   try {
     const response = await con.query(`SELECT front, back FROM cards WHERE deckname='${name}'`);
     if (response){
-      console.log(response.rows);
+      res.send({cardset: response.rows});
     }
   } catch (error) {
     res.status(500).send(error);
     console.log(error);
   } 
-  res.send({cardset: result});
+  //res.send({cardset: result});
 }
 
 /**
@@ -188,9 +188,18 @@ export const loadDeck = async (req: SafeRequest, res: SafeResponse): Promise<voi
  * @param res response
  * @return array of names of the saved decks of cards via response
  */
-export const listDecks = (_req: SafeRequest, res: SafeResponse): void => {
-  const vals: string[] = Array.from(savedDecks.keys());
-  res.send({deckNames: vals});
+export const listDecks = async (_req: SafeRequest, res: SafeResponse): Promise<void> => {
+  //const vals: string[] = Array.from(savedDecks.keys());
+  try {
+    const response = await con.query(`SELECT deckname as col FROM decks`);
+    if (response){
+      res.send({deckNames: response.rows});
+    }
+  } catch (error) {
+    res.status(500).send(error);
+    console.log(error);
+  } 
+  //res.send({deckNames: vals});
 }
 
 /**
@@ -199,9 +208,18 @@ export const listDecks = (_req: SafeRequest, res: SafeResponse): void => {
  * @param res response
  * @return array of records of previous scores
  */
-export const listScores = (_req: SafeRequest, res: SafeResponse): void => {
-  const vals: scoreRecord[] = savedScores.slice();
-  res.send({scores: vals});
+export const listScores = async (_req: SafeRequest, res: SafeResponse): Promise<void> => {
+  //const vals: scoreRecord[] = savedScores.slice();
+  try {
+    const response = await con.query(`SELECT deckname, username, score FROM scores`);
+    if (response){
+      res.send({scores: response.rows});
+    }
+  } catch (error) {
+    res.status(500).send(error);
+    console.log(error);
+  } 
+  //res.send({scores: vals});
 };
 
 /**
@@ -254,3 +272,4 @@ const first = (param: unknown): string|undefined => {
     return undefined;
   }
 };
+

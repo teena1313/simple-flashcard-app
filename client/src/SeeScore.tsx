@@ -46,7 +46,7 @@ export class SeeScore extends Component<ScoreProps, ScoreState> {
       for (const s of this.state.scores) {
         scoreRecs.push(
           <li>
-            Player [{s.player}] scored <b>{s.score}</b> on: {s.deck}
+            Player [{s.username}] scored <b>{s.score}</b> on: {s.deckname}
           </li>
         );
       }
