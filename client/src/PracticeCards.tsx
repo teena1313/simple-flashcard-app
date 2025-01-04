@@ -194,21 +194,21 @@ export class PracticeCards extends Component<PracticeProps, PracticeState> {
    * @param val unknown data to parse into an array of Items
    * @return card[] if val is an array of card and undefined otherwise
    */
-    doParseCardArray = (val: unknown): undefined | card[] => {
-      if (!Array.isArray(val)) {
-        console.error("not an array", val);
-        return undefined;
+  doParseCardArray = (val: unknown): undefined | card[] => {
+    if (!Array.isArray(val)) {
+      console.error("not an array", val);
+      return undefined;
+    }
+    const cards: card[] = [];
+    for (const curr of val) {
+      const card = parseCard(curr);
+      if (card === undefined) {
+        return;
+      } else {
+        console.log(card.front);
+        cards.push(card);
       }
-      const cards: card[] = [];
-      for (const curr of val) {
-        const card = parseCard(curr);
-        if (card === undefined) {
-          return;
-        } else {
-          console.log(card.front);
-          cards.push(card);
-        }
-      }
-      return cards;
-    };
+    }
+    return cards;
+  };
 }

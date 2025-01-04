@@ -37,7 +37,7 @@ export const createDecksTable = async () => {
 
 export const createCardsTable = async () => {
    await con.query(`CREATE TABLE IF NOT EXISTS cards
-      (card_id serial PRIMARY KEY, deckname VARCHAR (255) REFERENCES decks, 
+      (card_id SERIAL PRIMARY KEY, deckname VARCHAR (255) REFERENCES decks, 
       front VARCHAR (255) NOT NULL, back VARCHAR(255) NOT NULL);`)
 };
 
@@ -48,7 +48,7 @@ export const createScoresTable = async () => {
 };
 
 /**
- * Adds the new score to the savedScores array.
+ * Adds the new score to the savedScores array and scores table.
  * @param req request
  * @param res response
  * @return true on success via response, sends error codes otherwise.
@@ -77,7 +77,7 @@ export const addScore = async(req: SafeRequest, res: SafeResponse): Promise<void
 
   // save data to database
   try {
-    const response = await con.query(`INSERT INTO scores(deckname, username, score) VALUES ('${newDeck}', '${newPlayer}', ${newScore});`);
+    const response = await con.query(`INSERT INTO scores(deckname, username, score) VALUES ('${newDeck}', '${newPlayer}', '${newScore}');`);
     if (response){
        res.status(200).send({success: true});
     }
@@ -86,7 +86,6 @@ export const addScore = async(req: SafeRequest, res: SafeResponse): Promise<void
     console.log(error);
   }
 };
-
 
 /**
  * Adds the new deck to the savedDecks map.
@@ -120,7 +119,7 @@ export const addDeck = async (req: SafeRequest, res: SafeResponse): Promise<void
 
   savedDecks.set(name, cards);
 
-  // try saving to database
+  // insert deck name into deck table
   try {
     const response = await con.query(`INSERT INTO decks(deckname) VALUES ('${name}');`);
     if (response) {
@@ -131,10 +130,11 @@ export const addDeck = async (req: SafeRequest, res: SafeResponse): Promise<void
     console.log(error);
   }
 
+  // insert cards into cards table
   for (const card of cards) {
     try {
-      const response = await con.query(`INSERT INTO cards(deckname, front, back) VALUES ('${name}', '${card.front}', ${card.back});`);
-      if (response){
+      const response = await con.query(`INSERT INTO cards(deckname, front, back) VALUES ('${name}', '${card.front}', '${card.back}');`);
+      if (response) {
         success += 1;
       }
     } catch (error) {
@@ -143,7 +143,7 @@ export const addDeck = async (req: SafeRequest, res: SafeResponse): Promise<void
     }
   }
 
-  if (success === cards.length + 1) {
+  if (success === cards.length+1) {
     res.status(200).send({saved: 3});
   } else {
     res.status(500).send('Error');
@@ -157,7 +157,7 @@ export const addDeck = async (req: SafeRequest, res: SafeResponse): Promise<void
  * @param res response
  * @return set of cards associated with given query via response
  */
-export const loadDeck = (req: SafeRequest, res: SafeResponse): void => {
+export const loadDeck = async (req: SafeRequest, res: SafeResponse): Promise<void> => {
   const name = first(req.query.name);
   if (name === undefined) {
     res.status(400).send('missing "name" parameter');
@@ -170,6 +170,15 @@ export const loadDeck = (req: SafeRequest, res: SafeResponse): void => {
     return;
   }
 
+  try {
+    const response = await con.query(`SELECT front, back FROM cards WHERE deckname='${name}'`);
+    if (response){
+      console.log(response.rows);
+    }
+  } catch (error) {
+    res.status(500).send(error);
+    console.log(error);
+  } 
   res.send({cardset: result});
 }
 
