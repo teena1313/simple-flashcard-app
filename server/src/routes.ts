@@ -18,7 +18,7 @@ const savedDecks: Map<string, card[]> = new Map<string, card[]>();
 const {Client} = pg;
 
 // require('dotenv').config()
-// console.log(process.env)
+console.log(process.env)
 
 
 const con: pg.Client = new Client({
@@ -29,7 +29,11 @@ const con: pg.Client = new Client({
    port: +(process.env.REACT_APP_PORT || 5432)
 });
 
-con.connect();
+try {
+  con.connect();
+} catch (error) {
+  console.log(error);
+}
 
 export const createDecksTable = async () => {
    await con.query(`CREATE TABLE IF NOT EXISTS decks
