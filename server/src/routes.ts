@@ -18,7 +18,8 @@ const savedDecks: Map<string, card[]> = new Map<string, card[]>();
 const {Client} = pg;
 
 // require('dotenv').config()
-console.log(process.env)
+console.log(process.env);
+console.log("welcome to notecard backend :))");
 
 
 const con: pg.Client = new Client({
