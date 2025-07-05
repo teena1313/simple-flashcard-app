@@ -23,11 +23,11 @@ console.log("welcome to notecard backend :))");
 
 
 const con: pg.Client = new Client({
-   host: process.env.REACT_APP_HOST,
-   user: process.env.REACT_APP_USER,
-   password: process.env.REACT_APP_PWD,
-   database: process.env.REACT_APP_DB,
-   port: +(process.env.REACT_APP_PORT || 5432)
+   host: process.env.PGDB_HOST,
+   user: process.env.PGDB_USER,
+   password: process.env.PGDB_PWD,
+   database: process.env.PGDB_NAME,
+   port: +(process.env.PGDB_PORT || 5432)
 });
 
 try {
