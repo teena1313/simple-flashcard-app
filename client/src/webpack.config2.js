@@ -24,8 +24,9 @@ const config = {
     },
     proxy: {
        '/api': {
-            target: "http://10.0.0.98:8088",
-            // router: () => "http://10.0.0.98:8088",
+            target: "http://localhost:8080",
+            router: () => "http://76.138.149.125:8088",
+            changeOrigin: true,
             logLevel: 'debug'
        }
     }
