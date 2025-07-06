@@ -8,7 +8,8 @@ on:
     types: [opened, synchronize, reopened, closed]
     branches:
       - main
-
+env:
+  CI: false
 jobs:
   build_and_deploy_job:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
@@ -45,6 +46,12 @@ jobs:
           output_location: "build" # Built app content directory - optional
           github_id_token: ${{ steps.idtoken.outputs.result }}
           ###### End of Repository/Build Configurations ######
+        env:
+          MY_APP_ROUTER: ${{ secrets.MY_APP_ROUTER }}
+          MY_APP_TARGET: ${{ secrets.MY_APP_TARGET }}
+          MY_APP_PORT: ${{ secrets.MY_APP_PORT }}
+          MY_APP_HOST: ${{ secrets.MY_APP_HOST }}
+
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
