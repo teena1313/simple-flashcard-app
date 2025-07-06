@@ -18,13 +18,14 @@ const config = {
     static: path.join(__dirname, '../dist'),
     port: "8080",
     host: "0.0.0.0",
+    allowedHosts: ['https://proud-bush-0ea3e931e.2.azurestaticapps.net'],
     historyApiFallback: true,
     headers: {
       'Cache-Control': 'no-store',
     },
     proxy: {
        '/api': {
-            target: "http://localhost:8080",
+            target: "https://proud-bush-0ea3e931e.2.azurestaticapps.net",
             router: () => "http://76.138.149.125:8088",
             changeOrigin: true,
             logLevel: 'debug'
