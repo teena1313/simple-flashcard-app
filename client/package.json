@@ -4,10 +4,12 @@
   "description": "Flashcard App",
   "main": "",
   "scripts": {
-    "build": "webpack --config src/webpack.config.js",
+    "buildhome": "webpack --config src/webpack.config.js",
+    "build": "webpack --config src/webpack.config2.js",
     "lint": "comfy-tslint --no-mutation src/*.{ts,tsx}",
     "test": "ts-mocha -p tsconfig.json src/**/*_test.{ts,tsx} --require ignore-styles",
-    "start": "webpack-dev-server --config src/webpack.config.js"
+    "starthome": "webpack-dev-server --config src/webpack.config.js",
+    "start": "webpack-dev-server --config src/webpack.config2.js"
   },
   "author": "",
   "license": "ISC",

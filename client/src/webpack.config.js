@@ -16,16 +16,16 @@ const config = {
 
   devServer: {
     static: path.join(__dirname, '../dist'),
-    port: process.env.MY_APP_PORT,
-    host: process.env.MY_APP_HOST,
+    port: "8080",
+    host: "0.0.0.0",
     historyApiFallback: true,
     headers: {
       'Cache-Control': 'no-store',
     },
     proxy: {
        '/api': {
-            target: process.env.MY_APP_TARGET,
-            router: () => process.env.MY_APP_ROUTER,
+            target: "http://localhost:8080",
+            router: () => "http://10.0.0.98:8088",
             logLevel: 'debug'
        }
     }

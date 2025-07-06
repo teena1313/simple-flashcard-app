@@ -35,8 +35,7 @@ export class MainPage extends Component<MainProps, MainPageState> {
                 onClick={this.doCreateClick}>I want to make a new deck.</button>
         <button type="button"
                 onClick={this.doScoreClick}>See past scores.</button>
-        <p>router: ${process.env.MY_APP_ROUTER}</p>
-      </div>
+        </div>
     );
   };
   
