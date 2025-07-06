@@ -17,15 +17,15 @@ const config = {
   devServer: {
     static: path.join(__dirname, '../dist'),
     port: "8080",
-    host: "20.72.253.180",
+    host: "0.0.0.0",
     historyApiFallback: true,
     headers: {
       'Cache-Control': 'no-store',
     },
     proxy: {
        '/api': {
-            target: "https://proud-bush-0ea3e931e.2.azurestaticapps.net",
-            router: () => "http://10.0.0.98:8088",
+            target: "http://10.0.0.98:8088",
+            // router: () => "http://10.0.0.98:8088",
             logLevel: 'debug'
        }
     }
