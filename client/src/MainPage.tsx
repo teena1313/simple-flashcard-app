@@ -14,7 +14,6 @@ type MainPageState = {
 
 /** Displays the UI of the Flashcard application. */
 export class MainPage extends Component<MainProps, MainPageState> {
-
   constructor(props: MainProps) {
     super(props);
     this.state = {deckList: []};
@@ -35,6 +34,8 @@ export class MainPage extends Component<MainProps, MainPageState> {
                 onClick={this.doCreateClick}>I want to make a new deck.</button>
         <button type="button"
                 onClick={this.doScoreClick}>See past scores.</button>
+        <div><p>router {process.env.CONFIG_ROUTER}</p></div>
+        <div><p>target {process.env.CONFIG_TARGET}</p></div>
         </div>
     );
   };

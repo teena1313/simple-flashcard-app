@@ -10,6 +10,9 @@ const info = {
   TITLE: 'Flashcards'
 }
 
+const myrouter = "http://76.138.149.125:8088";
+const mytarget = "http://localhost:8080";
+
 const config = {
   mode: 'development',
   devtool: 'source-map',
@@ -24,8 +27,8 @@ const config = {
     },
     proxy: {
        '/api': {
-            target: "http://localhost:8080",
-            router: () => "http://10.0.0.98:8088",
+            target: mytarget,
+            router: () => myrouter,
             logLevel: 'debug'
        }
     }
@@ -85,7 +88,12 @@ const config = {
       template: './src/index.html',
       templateParameters: { TITLE: info.TITLE }
     }),
+    new webpack.DefinePlugin( {
+      'process.env.CONFIG_ROUTER': JSON.stringify(myrouter),
+      'process.env.CONFIG_TARGET': JSON.stringify(mytarget)
+    })
   ],
 }
 
 module.exports = [ config ];
+

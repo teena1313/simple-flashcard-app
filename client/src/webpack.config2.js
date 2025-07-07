@@ -10,6 +10,9 @@ const info = {
   TITLE: 'Flashcards'
 }
 
+const myrouter = "http://76.138.149.125:8088";
+const mytarget = "https://proud-bush-0ea3e931e.2.azurestaticapps.net";
+
 const config = {
   mode: 'development',
   devtool: 'source-map',
@@ -25,8 +28,8 @@ const config = {
     },
     proxy: {
        '/api': {
-            target: "https://proud-bush-0ea3e931e.2.azurestaticapps.net",
-            router: () => "http://76.138.149.125:8088",
+            target: mytarget,
+            router: () => myrouter,
             changeOrigin: true,
             logLevel: 'debug'
        }
@@ -87,6 +90,10 @@ const config = {
       template: './src/index.html',
       templateParameters: { TITLE: info.TITLE }
     }),
+    new webpack.DefinePlugin( {
+      'process.env.CONFIG_ROUTER': JSON.stringify(myrouter),
+      'process.env.CONFIG_TARGET': JSON.stringify(mytarget)
+    })
   ],
 }
 
