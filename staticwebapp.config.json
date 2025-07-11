@@ -5,7 +5,7 @@
       "methods": [
         "get"
       ],
-      "redirect": "/api/listScores"
+      "redirect": "/api"
     }
   ]
 }
