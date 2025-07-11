@@ -10,8 +10,9 @@ const info = {
   TITLE: 'Flashcards'
 }
 
-// const myrouter = "http://76.138.149.125:8088";
-const myrouter = "https://notecard-bcknd-chdmgkeuhahdczh7.westus-01.azurewebsites.net";
+const myrouter = "http://76.138.149.125:8088";
+// const myrouter = "http://localhost:8088";
+// const myrouter = "https://notecard-bcknd-chdmgkeuhahdczh7.westus-01.azurewebsites.net";
 const mytarget = "https://proud-bush-0ea3e931e.2.azurestaticapps.net";
 // const mytarget = "http://localhost:8080"
 
@@ -23,6 +24,7 @@ const config = {
     static: path.join(__dirname, '../dist'),
     port: "8080",
     host: "proud-bush-0ea3e931e.2.azurestaticapps.net",
+    // host: '0.0.0.0',
     // allowedHosts: ['https://proud-bush-0ea3e931e.2.azurestaticapps.net'],
     historyApiFallback: true,
     headers: {
@@ -35,9 +37,19 @@ const config = {
             changeOrigin: true,
             logLevel: 'debug'
        }
+    },
+    onBeforeSetupMiddleware(devServer){
+      devServer.app.use('/', function (req, res,next) {
+          console.log(`from ${req.ip} - ${req.method} - ${req.originalUrl}`);
+          next();
+      });
     }
   },
 
+  infrastructureLogging: {
+    debug: [name => name.includes('webpack-dev-server')],
+  },
+  
   module: {
     rules: [
       {
