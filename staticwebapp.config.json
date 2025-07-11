@@ -5,7 +5,7 @@
       "methods": [
         "get"
       ],
-      "redirect": "http://76.138.149.125:8088/api/listDecks"
+      "redirect": "/api/listScores"
     }
   ]
 }
