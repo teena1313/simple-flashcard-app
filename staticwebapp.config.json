@@ -1,0 +1,11 @@
+{
+  "routes": [
+    {
+      "route": "/api/listDecks",
+      "methods": [
+        "get"
+      ],
+      "redirect": "/api"
+    }
+  ]
+}
