@@ -10,6 +10,10 @@ const info = {
   TITLE: 'Flashcards'
 }
 
+// home
+// const myrouter = "http://10.0.0.98:8088"
+
+// exposed IP
 const myrouter = "http://76.138.149.125:8088";
 const mytarget = "http://localhost:8080";
 
