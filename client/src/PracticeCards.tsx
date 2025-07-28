@@ -205,7 +205,6 @@ export class PracticeCards extends Component<PracticeProps, PracticeState> {
       if (card === undefined) {
         return;
       } else {
-        console.log(card.front);
         cards.push(card);
       }
     }
